@@ -1,0 +1,281 @@
+%========= info ===================
+% Esta es una plantilla para reportes de laboratorio
+% Autor: Alex Soto
+% Licencia: 
+% ================================
+
+\documentclass[12pt]{article} % Declarando clase de documento
+%======= pre-ambulo ==========%
+\usepackage[utf8]{inputenc}
+% \usepackage[backend=biber, style=ieee, sorting=ynt]{biblatex}
+\usepackage[backend=biber, style=ieee]{biblatex}
+\addbibresource{referencias.bib}
+
+%===== Definiendo Idioma Español =======
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+%===== Control de Margenes ======
+\usepackage[a4paper,tmargin=3cm,bmargin=2.5cm,lmargin=3cm, rmargin=2.5cm, bindingoffset=6mm]{geometry}
+%======================================================================================================
+%======== libreira para poner color en un cuadro
+\usepackage{framed}
+\usepackage{xcolor}
+\definecolor{shadecolor}{rgb}{255,255,255}
+%======================================
+%==========Libreria para Justificar===
+\usepackage{ragged2e} 
+% ======= librery graphicx=========
+\usepackage{graphicx}
+% =================================
+% ===== librerias matematicas ==========
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+%========= Enlaces
+\usepackage{hyperref}
+
+
+
+\begin{document}
+
+\title{Teorema maestro}
+\hrulefill
+\justify En el análisis de algoritmos, el \textbf{teorema maestro} proporciona una solución sencilla en términos asintóticos (usando una Cota superior asintótica) para ecuaciones de recurrencia que ocurren en muchos algoritmos recursivos tales como en el Algoritmo divide y vencerás. Fue popularizado por el libro Introducción a los algoritmos por Cormen, Leiserson, Rivest, y Stein, en el cual fue tanto introducido como probado formalmente. No todas las ecuaciones de recurrencia pueden ser resueltas con el uso del teorema maestro.
+
+\tableofcontents
+
+%\section*{Introduccion}
+
+\justify Considere un problema que puede ser resuelto a través de un algoritmo recursivo como el siguiente:
+
+\begin{shaded*}
+    
+\hspace{-0.75cm}\textbf{procedimiento} T( n : tamaño del problema ) \textbf{definición:}\newline
+    \hspace{1cm}\textbf{if} $n < 1$ \textbf{then exit}
+        
+\begin{verbatim}
+        Hacer trabajo f(n)
+
+        T(n/b)
+        T(n/b)
+        ...repetir una cantidad de  a veces...
+        T(n/b)
+    
+\end{verbatim}
+    \hspace{0.5cm}\textbf{fin procedimiento }
+\end{shaded*}
+
+\justify En el algoritmo mostrado arriba se divide el problema original en una cantidad menor de subproblemas de manera recursiva, cada uno de estos subproblemas siendo del tamaño de n/b. Esto podría ser visualizado como la construcción de un árbol de llamadas al problema, siendo cada nodo del árbol una instancia recursiva del mismo y sus hijos siendo instancias de las llamadas subsiguientes. En el ejemplo de arriba, cada nodo tendría un número a de hijos. Cada nodo hará la cantidad de trabajo correspondiente al tamaño del subproblema n, pasado a esa instancia en particular, estando la cantidad de trabajo realizado determinado por $f(n)$. El trabajo total realizado por todas las llamadas del árbol es la suma de los trabajos hechos por cada uno de los nodos del árbol.\\
+
+\justify Algoritmos como el descrito arriba pueden ser representados por una relación de recurrencia como la siguiente: $T(n)=\alpha T({\frac{n}{b}})+f(n)$. Esta relación de recurrencia puede ser sucesivamente sustituida en sí misma y expandida hasta obtener una expresión que represente la cantidad total de trabajo \cite{dertat_2017}.\\
+
+\justify El teorema maestro nos permite fácilmente calcular el tiempo de ejecución de este tipo de algoritmos recursivos en notación de Cota superior asintótica, sin la necesidad de hacer la expansión de las distintas llamadas recursivas.\\
+
+\section{Forma Genérica}
+\vspace{-0.5cm}
+\hrulefill
+\justify El teorema maestro sirve para resolver relaciones recursivas de la siguiente forma:
+
+\begin{flushleft}
+    \begin{equation*}
+        %\label{eq:ecuacion1}
+        \ T(n)=\alpha T\left(\frac{n}{b}\right) + f(n) \text{   donde  } a \geq{1}, b>1
+    \end{equation*}
+\end{flushleft}
+
+\justify En la aplicación de análisis de algoritmos recursivos, las constantes y funciones toman los siguientes significados:
+
+\begin{itemize}
+    \item $n$ es el tamaño del problema a resolver.
+    \item $a$ es el número de subproblemas en la recursión.
+    \item $n/b$ el tamaño de cada subproblema. (Aquí se asume que todos los subproblemas tienen el mismo tamaño).
+    \item $f (n)$ es el costo del trabajo hecho fuera de las llamadas recursivas, que incluye el costo de la división del problema y el costo de unir las soluciones de los subproblemas.
+\end{itemize}
+
+\justify Luego, es posible realizar una cota en notación Big O en los siguientes tres casos:
+
+
+
+\subsection{Caso 1}
+\subsubsection{Forma Genérica}
+\justify Si $f(n)$ = $O({n}^{c})$ donde $c < {log}_{b} a$ (usando Cota superior asintótica) entonces:
+
+\begin{equation*}
+    \label{eq:ecuacion2}
+    \ T(n)=\Theta ({n}^{{log}_{b}a})
+\end{equation*}
+
+\subsubsection*{Ejemplo}
+
+\begin{equation*}
+    \label{eq:ecuacion3}
+    \ T(n)=8 T \left(\frac{n}{2}\right) + 1000{{n}^{2}}
+\end{equation*}
+
+\justify Como puede verse en la fórmula de arriba:
+
+$a = 8, b = 2, f(n) = 1000 {n}^{2} $, entonces \\  $f(n)$ = $O({n}^{c})$, donde $ \text{c = 2}$
+
+\justify Luego, vemos que se cumple la condición del caso 1:
+
+\begin{equation*}
+    \label{eq:ecuacion4}
+    \ T(n)=\Theta ({n}^{{log}_{b}a}) = \Theta ({n}^{3})
+\end{equation*}
+
+\subsection{Caso 2}
+\subsubsection{Forma Genérica}
+\justify Si es verdad que para alguna constante $k \geq 0,$ que:
+\begin{equation*}
+    \label{eq:ecuacion4}
+    \ f(n)=\Theta ({n}^{c} {log}^{k} n) \text{   donde  } c= {log}_{b} a
+\end{equation*}
+Entonces:
+
+\begin{equation*}
+    \label{eq:ecuacion5}
+    \ T(n)=\Theta ({n}^{c} {log}^{k+1} n)
+\end{equation*}
+
+\subsubsection*{Ejemplo}
+
+\begin{equation*}
+    \label{eq:ecuacion6}
+    \ T(n)=2 T({n}^{c} {log}^{k+1} n)
+\end{equation*}
+
+\justify Como podemos ver en la fórmula de arriba, las variables tienen los siguientes valores:\\
+
+
+%\begin{equation}
+%    \label{eq:ecuacion6}
+     %\vspace{1cm}
+     \justify $a = 2$ \\
+     $b = 2 $\\
+     $c = 1 $\\
+     $f(n) = 10n$ \\
+     $f(n) = \Theta ({n}^{c} {log}^{k+1} n) \text{donde} c = 1, k=0$ \\
+    
+%\end{equation}
+
+Luego, nos fijamos que cumpla la condición del caso 2:\\
+\vspace{0.5cm}
+${log}_{b} a = {log}_{2} 2 = 1 $, \text{ luego, se cumple que}
+ $c = {log}_{b} a$
+
+Entonces por el segundo caso del teorema maestro:
+
+\begin{equation*}
+    \label{eq:ecuacion5}
+    \ T(n)=\Theta ({n}^{{log}_{b} a} {log}^{k+1} n) = \Theta ({n}^{1} {log}^{1} n) =  \Theta (n\hspace{1mm} log \hspace{1mm}n)
+\end{equation*}
+
+
+Dando de esa manera que la relación de recurrencia de $T(n)$ es $\Theta (n\hspace{1mm}  log \hspace{1mm} n)$.
+
+\subsection{Caso 3}
+\subsubsection{Forma Genérica}
+Si es verdad que:
+
+\begin{gather*}
+    \label{eq:ecuacion6}
+    \ f(n)=\Omega ({n}^{c}) \text{ donde } c > ( {log}_{b}\hspace{1mm} a)
+\end{gather*}
+
+Y si es verdad además que:
+
+\begin{gather*}
+    \label{eq:ecuacion6*}
+    \alpha f\left(\frac{n}{b}\right) = kf(n) \text{ para alguna constante $k<1 $ y suficientemente grande $n$}
+\end{gather*}
+
+
+Entonces:
+
+\begin{equation*}
+    \label{eq:ecuacion5}
+    \ T(n)=\Theta \left(f(n)\right)
+\end{equation*}
+
+\subsubsection*{Ejemplo}
+\begin{equation*}
+    \label{eq:ecuacion6}
+    \ T(n)=2 T \left(\frac{n}{2}\right) + {n}^{2}
+\end{equation*}
+Como puede verse en la fórmula de arriba, las variables obtienen los siguientes valores:
+
+$a\hspace{1mm}\hspace{1mm}=\hspace{1mm} 2$, $b\hspace{1mm}\hspace{1mm}=\hspace{1mm} 2$, $f(n)\hspace{1mm}\hspace{1mm}=\hspace{1mm} {n}^{2}$ 
+
+$f(n)\hspace{1mm}=\hspace{1mm} \Omega ({n}^{2})$, donde  $c\hspace{1mm}=\hspace{1mm}2$.\newline
+
+\hspace{-0.5cm}Luego se comprueba que satisface la condición del caso 3:
+ 
+\begin{equation*}
+    \label{eq:ecuacion6}
+    \ {log}_{b} \hspace{1mm} a \hspace{1mm}=\hspace{1mm} {log}_{2} \hspace{1mm} 2 \hspace{1mm}=\hspace{1mm} 1, \text{ y por lo tanto se cumple que}, c\hspace{1mm}>\hspace{1mm} {log}_{b} \hspace{1mm} a
+\end{equation*}
+\newline
+La condición cumple que:
+\begin{equation*}
+    \label{eq:ecuacion6}
+    \ 2 \left(\frac{{n}^{2} }{4}\right)\hspace{1mm} \leq \hspace{1mm} k {n}^{2}, \text{eligiendo } k = 1 / 2
+\end{equation*}
+
+\hspace{-0.5cm}Entonces por el tercer caso del teorema maestro:
+\begin{equation*}
+    \label{eq:ecuacion6}
+    \ T(n) = \Theta \left(f(n)\right) = \Theta ({n}^{2})
+\end{equation*}
+
+\hspace{-0.5cm}Por consiguiente la relacion de recurrencia $T(n)$ es en $\Theta ({n}^{2})$
+
+\section{Casos Irresolubles}
+\vspace{-0.5cm}
+\hrulefill
+\justify Los siguientes casos no pueden ser resueltos a través de la utilización del teorema maestro \cite{cormen2009introduction}:
+\begin{itemize}
+    \item $T(n)= {2}^{n} T \left(\frac{n}{2}\right) + {n}^{n}$\\
+    $a$ no es una constante; el número de subproblemas debe ser fijo
+ 
+    \item $T(n)= {2}^{n} T \left(\frac{n}{2}\right) + \frac{n}{log \hspace{1mm}n}$\\
+    $f(n)$ debe ser un polinomio.
+ 
+    \item $T(n)= 0.5  T \left(\frac{n}{2}\right) + n$\\
+    $a<1$ no puede darse el caso de que haya menos de un subproblema.
+    
+    \item $T(n)= 64 T \left(\frac{n}{8}\right) - {n}^{2} log \hspace{1mm} n$\\
+    $f(n)$ es el tiempo de trabajo, no puede ser negativo.
+    
+    \item  $T(n)= T \left(\frac{n}{2}\right) + n(2-\cos{n})$\\
+    Caso 3 pero hay una violación de regularidad.
+    
+    
+\end{itemize}
+
+
+\section{Bibliografia}
+\printbibliography[title={Bibliografía}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+
+
